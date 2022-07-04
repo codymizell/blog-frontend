@@ -1,4 +1,4 @@
-import React from 'react'
+import React from 'react';
 
 const style = {
   color: '#008bdb',
@@ -9,14 +9,14 @@ const style = {
   borderRadius: '5px',
   padding: '10px',
   marginBottom: '10px'
-}
+};
 
 const Alert = ({ msg }) => {
-  if (!msg) return null
+  if (!msg) return null;
 
   return (
     <div style={style}>{msg}</div>
-  )
-}
+  );
+};
 
-export default Alert
+export default Alert;
