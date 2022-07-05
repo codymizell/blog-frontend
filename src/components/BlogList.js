@@ -1,14 +1,18 @@
 import { useSelector, useDispatch } from 'react-redux';
-import { useState, useEffect, useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import { setNotification } from '../reducers/notificationReducer';
 import { removeBlog, initializeBlogs, addLike } from '../reducers/blogsReducer';
+import { Link, Navigate } from 'react-router-dom';
 import Togglable from './Togglable';
 import NewBlogForm from './NewBlogForm';
 
-const BlogDetails = ({ blog, visible }) => {
+export const BlogDetails = ({ blog }) => {
   const dispatch = useDispatch();
   const user = useSelector(state => state.user);
-  if (!visible) return null;
+
+  if (!blog) return (
+    <Navigate replace to="/" />
+  );
 
   const own = blog.user && user.username === blog.user.username;
   const addedBy = blog.user && blog.user.name ? blog.user.name : 'anonymous';
@@ -33,13 +37,12 @@ const BlogDetails = ({ blog, visible }) => {
 
   return (
     <div>
-      <div>
-        <a href={blog.url}>{blog.url}</a>
-      </div>
+      <h1>{blog.title} - {blog.author}</h1>
+      <a href={blog.url}>{blog.url}</a>
       <div>
         {blog.likes} likes <button onClick={() => likeBlog()}>like</button>
       </div>
-      {addedBy}
+      added by {addedBy + ' '}
       {own && <button onClick={() => deleteBlog(blog.id)}>
         remove
       </button>}
@@ -48,7 +51,6 @@ const BlogDetails = ({ blog, visible }) => {
 };
 
 const Blog = ({ blog }) => {
-  const [visible, setVisible] = useState(false);
 
   const style = {
     padding: 3,
@@ -59,14 +61,7 @@ const Blog = ({ blog }) => {
 
   return (
     <div style={style} className='blog'>
-      {blog.title}, by {blog.author}
-      <button onClick={() => setVisible(!visible)}>
-        {visible ? 'hide' : 'view'}
-      </button>
-      <BlogDetails
-        blog={blog}
-        visible={visible}
-      />
+      <Link to={`/blogs/${blog.id}`}>{blog.title}, by {blog.author}</Link>
     </div>
   );
 };
