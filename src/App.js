@@ -1,17 +1,16 @@
-import { useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { Routes, Route } from 'react-router-dom';
 
 import LoginForm from './components/LoginForm';
-import NewBlogForm from './components/NewBlogForm';
 import Notification from './components/Notification';
-import Togglable from './components/Togglable';
 import BlogList from './components/BlogList';
 import { logout } from './reducers/userReducer';
+import Users from './components/Users';
+import NavBar from './components/NavBar';
 
 const App = () => {
   const dispatch = useDispatch();
   const user = useSelector(state => state.user);
-  const blogFormRef = useRef();
 
 
 
@@ -24,6 +23,9 @@ const App = () => {
 
   return (
     <div>
+      <NavBar />
+
+
       <h2>blogs</h2>
       <Notification />
       <div>
@@ -31,10 +33,10 @@ const App = () => {
         <button onClick={() => dispatch(logout())}>logout</button>
       </div>
 
-      <Togglable buttonLabel='new blog' ref={blogFormRef}>
-        <NewBlogForm />
-      </Togglable>
-      <BlogList />
+      <Routes>
+        <Route path="/users" element={<Users />} />
+        <Route path="/" element={<BlogList />} />
+      </Routes>
     </div>
   );
 };

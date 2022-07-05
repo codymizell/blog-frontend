@@ -1,7 +1,9 @@
 import { useSelector, useDispatch } from 'react-redux';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { setNotification } from '../reducers/notificationReducer';
 import { removeBlog, initializeBlogs, addLike } from '../reducers/blogsReducer';
+import Togglable from './Togglable';
+import NewBlogForm from './NewBlogForm';
 
 const BlogDetails = ({ blog, visible }) => {
   const dispatch = useDispatch();
@@ -10,8 +12,6 @@ const BlogDetails = ({ blog, visible }) => {
 
   const own = blog.user && user.username === blog.user.username;
   const addedBy = blog.user && blog.user.name ? blog.user.name : 'anonymous';
-
-
 
   const likeBlog = () => {
     dispatch(addLike(blog));
@@ -74,16 +74,23 @@ const Blog = ({ blog }) => {
 const BlogList = () => {
   const dispatch = useDispatch();
   const blogs = useSelector(state => state.blogs);
+  const blogFormRef = useRef();
+
 
   useEffect(() => {
     dispatch(initializeBlogs());
   }, [dispatch, blogs]);
 
   return (
-    <div id='blogs'>
-      {blogs.map(blog =>
-        <Blog key={blog.id} blog={blog} />
-      )}
+    <div>
+      <Togglable buttonLabel='new blog' ref={blogFormRef}>
+        <NewBlogForm />
+      </Togglable>
+      <div id='blogs'>
+        {blogs.map(blog =>
+          <Blog key={blog.id} blog={blog} />
+        )}
+      </div>
     </div>
   );
 };
