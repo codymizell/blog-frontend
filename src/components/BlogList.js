@@ -1,14 +1,19 @@
 import { useSelector, useDispatch } from 'react-redux';
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { setNotification } from '../reducers/notificationReducer';
-import { removeBlog, initializeBlogs, addLike } from '../reducers/blogsReducer';
-import { Link, Navigate } from 'react-router-dom';
+import { removeBlog, initializeBlogs, addLike, addComment } from '../reducers/blogsReducer';
+import { Link, Navigate, useParams } from 'react-router-dom';
 import Togglable from './Togglable';
 import NewBlogForm from './NewBlogForm';
 
-export const BlogDetails = ({ blog }) => {
+export const BlogDetails = () => {
+  const { id } = useParams();
   const dispatch = useDispatch();
   const user = useSelector(state => state.user);
+  const blog = useSelector(state => {
+    return state.blogs.find(blog => blog.id === id);
+  });
+  const [likes, setLikes] = useState(blog ? blog.likes : undefined);
 
   if (!blog) return (
     <Navigate replace to="/" />
@@ -20,6 +25,7 @@ export const BlogDetails = ({ blog }) => {
   const likeBlog = () => {
     dispatch(addLike(blog));
     dispatch(setNotification(`liked blog '${blog.title}'`));
+    setLikes(blog.likes + 1);
   };
 
   const deleteBlog = () => {
@@ -32,7 +38,22 @@ export const BlogDetails = ({ blog }) => {
     } catch (err) {
       dispatch(setNotification(`there was an error removing this blog: ${err.response.data.err}`));
     }
+  };
 
+  const handleComment = (event) => {
+    event.preventDefault();
+
+    const comment = {
+      comment: event.target.comment.value,
+    };
+
+    dispatch(addComment(blog.id, comment));
+
+    event.target.comment.value = '';
+  };
+
+  const generateKey = () => {
+    return Math.floor(Math.random() * 100000);
   };
 
   return (
@@ -40,12 +61,22 @@ export const BlogDetails = ({ blog }) => {
       <h1>{blog.title} - {blog.author}</h1>
       <a href={blog.url}>{blog.url}</a>
       <div>
-        {blog.likes} likes <button onClick={() => likeBlog()}>like</button>
+        {likes} likes <button onClick={() => likeBlog()}>like</button>
       </div>
       added by {addedBy + ' '}
       {own && <button onClick={() => deleteBlog(blog.id)}>
         remove
       </button>}
+
+      <h2>comments</h2>
+      <form onSubmit={handleComment}>
+        <input name="comment" placeholder="add a comment" />
+        <button type="submit">add comment</button>
+      </form>
+
+      <ul>
+        {blog.comments.map(comment => <li key={generateKey()}>{comment}</li>)}
+      </ul>
     </div>
   );
 };

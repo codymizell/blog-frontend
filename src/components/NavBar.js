@@ -1,16 +1,29 @@
 import { Link } from 'react-router-dom';
+import { logout } from '../reducers/userReducer';
+import { useDispatch } from 'react-redux';
 
-const NavBar = () => {
 
-  const padding = {
-    padding: 5
+const NavBar = ({ user }) => {
+  const dispatch = useDispatch();
+
+
+  const NavBarStyle = {
+    padding: 5,
+    backgroundColor: 'lightgrey',
+  };
+
+  const NavItemStyle = {
+    padding: 5,
   };
 
   return (
-    <>
-      <Link style={padding} to="/">home</Link>
-      <Link style={padding} to="/users">users</Link>
-    </>
+    <div style={NavBarStyle}>
+      <Link style={NavItemStyle} to="/">blogs</Link>
+      <Link style={NavItemStyle} to="/users">users</Link>
+      <strong>{user.username}</strong>{' logged in  '}
+      <button onClick={() => dispatch(logout())}>logout</button>
+
+    </div>
   );
 };
 
