@@ -1,6 +1,8 @@
+/* eslint-disable no-unused-vars */
 import { createBlog, initializeBlogs } from '../reducers/blogsReducer';
 import { setNotification } from '../reducers/notificationReducer';
 import { useDispatch } from 'react-redux/es/exports';
+import { Box, Button, createStyles, Input, Stack, TextField, Typography, } from '@mui/material';
 
 const NewBlogForm = () => {
   const dispatch = useDispatch();
@@ -30,35 +32,40 @@ const NewBlogForm = () => {
   };
 
   return (
-    <div>
-      <h2>Create new</h2>
+    <Stack marginBottom='8px'>
+      <Typography variant="h6" component="div">
+        create blog
+      </Typography>
       <form onSubmit={handleSubmit}>
-        <div>
-          title
-          <input
+        <Stack alignItems='flex-start' spacing={0.5} >
+
+          <TextField
             name='title'
-            placeholder='title of the blog'
+            label='title'
+            variant='filled'
+            size='small'
+            sx={{ 'label': { color: 'white' }, bgcolor: '#414551' }}
           />
-        </div>
-        <div>
-          author
-          <input
+          <TextField
             name='author'
-            placeholder='author of the blog'
+            label='author'
+            variant='filled'
+            size='small'
+            sx={{ 'label': { color: 'white' }, bgcolor: '#414551' }}
           />
-        </div>
-        <div>
-          url
-          <input
+          <TextField
             name='url'
-            placeholder='url of the blog'
+            label='url'
+            variant='filled'
+            size='small'
+            sx={{ 'label': { color: 'white' }, bgcolor: '#414551' }}
           />
-        </div>
-        <button id='create-button' type='submit'>
-          create
-        </button>
-      </form>
-    </div>
+          <Button variant="contained" color="primary" id='create-button' type='submit'>
+            create
+          </Button>
+        </Stack>
+      </form >
+    </Stack >
   );
 };
 

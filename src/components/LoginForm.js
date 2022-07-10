@@ -1,6 +1,8 @@
 import { useDispatch } from 'react-redux';
 import { login, } from '../reducers/userReducer';
 import { setNotification } from '../reducers/notificationReducer';
+import '../App.css';
+import { Button, TextField, Typography } from '@mui/material';
 
 const LoginForm = () => {
   const dispatch = useDispatch();
@@ -29,27 +31,33 @@ const LoginForm = () => {
 
   return (
     <div>
-      <h2>Log in to application</h2>
+      <Typography variant="h6" component="div">
+        login
+      </Typography>
 
       <form onSubmit={handleLogin}>
         <div>
-          username
-          <input
+          <TextField
             name='username'
-            id='username'
+            label='username'
+            variant='filled'
+            size='small'
+            sx={{ 'label': { color: 'white' }, bgcolor: '#414551' }}
           />
         </div>
         <div>
-          password
-          <input
-            type="password"
+          <TextField
             name='password'
-            id="password"
+            label='password'
+            variant='filled'
+            size='small'
+            type='password'
+            sx={{ 'label': { color: 'white' }, bgcolor: '#414551', }}
           />
         </div>
-        <button id="login-button" type="submit">
+        <Button variant="contained" color="primary" id='create-button' type='submit'>
           login
-        </button>
+        </Button>
       </form>
     </div>
   );

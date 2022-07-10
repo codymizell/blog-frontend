@@ -1,27 +1,56 @@
 import { useSelector, useDispatch } from 'react-redux/es/exports';
 import { useEffect } from 'react';
 import { initializeUserList } from '../reducers/userListReducer';
-import { Link } from 'react-router-dom';
+import { Link as RouterLink } from 'react-router-dom';
+import { Avatar, Button, List, ListItem, ListItemButton, ListItemText, Table, TableBody, TableCell, tableCellClasses, TableContainer, TableHead, TableRow, Typography } from '@mui/material';
+import { getRandomAvatar } from '../resources/avatarHelper';
 
 export const User = ({ user }) => {
   if (!user) return null;
 
   return (
     <div>
-      <h1>{`${user.username}'s profile`}</h1>
-      <h2>added blogs</h2>
-      <ul>
-        {user.blogs.map(blog => <li key={blog.id}>{blog.title}</li>)}
-      </ul>
+      <div style={{
+        display: 'flex',
+        alignItems: 'center',
+        flexWrap: 'wrap',
+        gap: 8,
+        padding: '40px 0 20px 0'
+      }}>
+        <Avatar alt="avatar" src={getRandomAvatar()} sx={{ bgcolor: '#4e5463', padding: .5 }} />
+        <Typography variant="h3" component="div" color="" >
+          {user.username}
+        </Typography>
+      </div>
+
+      <Typography variant="caption" component="div" color="#b2b2b2" >
+        name
+      </Typography>
+      <Typography variant="subtitle1" component="div" color="" >
+        {user.name}
+      </Typography>
+
+      <Typography variant="caption" component="div" color="#b2b2b2" marginTop='10px'>
+        blogs
+      </Typography>
+
+      <List dense={true}>
+        {user.blogs.map(blog =>
+          <ListItem disableGutters={true} key={blog.id}>
+            <ListItemButton component={RouterLink} to={`/blogs/${blog.id}`} sx={{ minHeight: 0, minWidth: 0, padding: '6px 6px 6px 0' }}>
+              <ListItemText
+                primary={blog.title}
+                primaryTypographyProps={{ fontSize: '14px' }}
+              />
+            </ListItemButton>
+          </ListItem>)
+        }
+      </List>
     </div>
   );
 };
 
 const Users = () => {
-  const tableData = {
-    padding: '15px',
-    textAlign: 'center',
-  };
 
   const dispatch = useDispatch();
   const userList = useSelector(state => state.userList);
@@ -32,30 +61,51 @@ const Users = () => {
 
   return (
     <div>
-      <div>
-        <h1>Users</h1>
-      </div>
-      <table>
-        <thead>
-          <tr>
-            <th style={tableData}>user</th>
-            <th style={tableData}>blogs created</th>
-          </tr>
-        </thead>
-        <tbody>
-          {userList.map(user => {
-            return (
-              <tr key={user.id}>
-                <td style={tableData}>
-                  <Link to={`/users/${user.id}`}>{user.username}</Link>
-                </td>
-                <td style={tableData}>{user.blogs.length}</td>
-              </tr>
-            );
-          })}
-        </tbody>
-      </table>
-    </div>
+
+      <Typography variant="h3" component="div" sx={{ margin: '40px 0 40px 0' }}>
+        users
+      </Typography>
+      <TableContainer >
+        <Table size="small" sx={{
+          [`& .${tableCellClasses.root}`]: {
+            borderBottom: 'none'
+          }
+        }} >
+          <TableHead>
+            <TableRow>
+              <TableCell align="left" sx={{ color: 'white' }}>user</TableCell>
+              <TableCell align="left" sx={{ color: 'white' }}>name</TableCell>
+              <TableCell align="left" sx={{ color: 'white' }}>blogs created</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {userList.map(user => {
+              return (
+                <TableRow
+                  key={user.id}
+                  sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                >
+
+                  <TableCell sx={{ color: 'white' }}>
+                    <Button
+                      color='inherit'
+                      component={RouterLink}
+                      to={`/users/${user.id}`}
+                      sx={{ textTransform: 'none', margin: 0, padding: '6px 0 6px 0', minHeight: 0, minWidth: 0 }}
+                    >
+                      {user.username}
+                    </Button>
+
+                  </TableCell>
+                  <TableCell sx={{ color: 'white' }}>{user.name}</TableCell>
+                  <TableCell sx={{ color: 'white' }}>{user.blogs.length}</TableCell>
+                </TableRow>
+              );
+            })}
+          </TableBody>
+        </Table>
+      </TableContainer>
+    </div >
   );
 };
 
