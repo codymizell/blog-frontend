@@ -1,8 +1,7 @@
-/* eslint-disable no-unused-vars */
 import { createBlog, initializeBlogs } from '../reducers/blogsReducer';
 import { setNotification } from '../reducers/notificationReducer';
 import { useDispatch } from 'react-redux/es/exports';
-import { Box, Button, createStyles, Input, Stack, TextField, Typography, } from '@mui/material';
+import { Button, Stack, TextField, Typography, } from '@mui/material';
 
 const NewBlogForm = () => {
   const dispatch = useDispatch();
@@ -12,10 +11,10 @@ const NewBlogForm = () => {
 
     const title = event.target.title.value;
     const author = event.target.author.value;
-    const url = event.target.url.value;
+    const content = event.target.content.value;
 
     try {
-      dispatch(createBlog({ title, author, url, likes: 0 }));
+      dispatch(createBlog({ title, author, content, likes: 0 }));
       dispatch(initializeBlogs());
       dispatch(setNotification(`you added a new blog '${title}' by ${author}`, 7));
     } catch (err) {
@@ -25,10 +24,10 @@ const NewBlogForm = () => {
     clearFields(event.target);
   };
 
-  const clearFields = ({ title, author, url }) => {
+  const clearFields = ({ title, author, content }) => {
     title.value = '';
     author.value = '';
-    url.value = '';
+    content.value = '';
   };
 
   return (
@@ -38,7 +37,6 @@ const NewBlogForm = () => {
       </Typography>
       <form onSubmit={handleSubmit}>
         <Stack alignItems='flex-start' spacing={0.5} >
-
           <TextField
             name='title'
             label='title'
@@ -54,8 +52,8 @@ const NewBlogForm = () => {
             sx={{ 'label': { color: 'white' }, bgcolor: '#414551' }}
           />
           <TextField
-            name='url'
-            label='url'
+            name='content'
+            label='content'
             variant='filled'
             size='small'
             sx={{ 'label': { color: 'white' }, bgcolor: '#414551' }}

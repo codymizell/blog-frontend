@@ -6,11 +6,24 @@ import { Link as RouterLink, Navigate, useParams } from 'react-router-dom';
 import Togglable from './Togglable';
 import NewBlogForm from './NewBlogForm';
 
-import { List, ListItem, ListItemAvatar, ListItemText, Avatar, ListItemButton, Typography, Link, IconButton, TextField, Button, } from '@mui/material';
+import {
+  List, ListItem, ListItemAvatar, ListItemText, Avatar,
+  ListItemButton, Typography, IconButton, TextField,
+  Button,
+} from '@mui/material';
+
+import { styled } from '@mui/material/styles';
 import PersonIcon from '@mui/icons-material/Person';
 import ArticleIcon from '@mui/icons-material/Article';
 import ThumbUpIcon from '@mui/icons-material/ThumbUp';
 import DeleteIcon from '@mui/icons-material/Delete';
+
+const TextButtonContainer = styled('div')(() => ({
+  display: 'flex',
+  alignItems: 'center',
+  flexWrap: 'wrap',
+  marginBottom: '10px'
+}));
 
 
 export const BlogDetails = () => {
@@ -71,12 +84,8 @@ export const BlogDetails = () => {
       <Typography variant="h4" component='div' color='' marginTop='40px' >
         {blog.title}
       </Typography>
-      <div style={{
-        display: 'flex',
-        alignItems: 'center',
-        flexWrap: 'wrap',
-        marginBottom: '10px'
-      }}>
+
+      <TextButtonContainer>
         <Typography variant="caption" component="div" color="#b2b2b2">
           by {blog.author}
         </Typography>
@@ -85,23 +94,21 @@ export const BlogDetails = () => {
             <DeleteIcon fontSize="inherit" />
           </IconButton>
         }
-      </div>
+      </TextButtonContainer>
 
-      <Link href={blog.url}>{blog.url}</Link>
 
-      <div style={{
-        display: 'flex',
-        alignItems: 'center',
-        flexWrap: 'wrap',
-        marginBottom: '10px'
-      }}>
+      <Typography variant="subtitle1" component='div' color=''  >
+        {blog.content}
+      </Typography>
+
+      <TextButtonContainer sx={{ marginTop: '12px' }}>
         <Typography variant="caption" component="div" color="white">
           {likes}
         </Typography>
         <IconButton aria-label="delete" size="small" onClick={() => likeBlog()}>
           <ThumbUpIcon sx={{ color: 'white' }} fontSize="inherit" />
         </IconButton>
-      </div>
+      </TextButtonContainer>
 
       <Typography variant="h6" component='div' color='#c9c9c9' marginTop='40px' >
         comments
@@ -121,17 +128,18 @@ export const BlogDetails = () => {
       <List dense={true}>
         {blog.comments.map(comment => {
           return (
-            <ListItem key={generateKey()}>
-              <ListItemAvatar>
+            <ListItem key={generateKey()} style={{ display: 'flex', alignItems: 'center' }}>
+              <ListItemAvatar style={{ alignSelf: 'flex-start' }}>
                 <Avatar>
                   <PersonIcon />
                 </Avatar>
               </ListItemAvatar>
-              <ListItemText primary={comment} />
+              <ListItemText primary={comment} primaryTypographyProps={{ style: { whiteSpace: 'normal', wordWrap: 'break-word' } }} />
             </ListItem >
           );
         })}
       </List>
+
     </div >
   );
 };

@@ -6,7 +6,7 @@ import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
 import Button from '@mui/material/Button';
 import { Avatar, Box, Divider, IconButton, Menu, MenuItem, Tooltip } from '@mui/material';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
 
 const NavBar = ({ user }) => {

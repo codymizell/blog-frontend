@@ -1,24 +1,12 @@
 import { createSlice } from '@reduxjs/toolkit';
 import blogService from '../services/blogs';
 
-const sortBlogs = (blogs) => {
-  const newBlogs = [...blogs];
-  return newBlogs.sort((b1, b2) => {
-    if (b2.likes > b1.likes) {
-      return 1;
-    } else if (b1.likes > b2.likes) {
-      return -1;
-    }
-    return 0;
-  });
-};
-
 const blogSlice = createSlice({
   name: 'blogs',
   initialState: [],
   reducers: {
     setBlogs(state, action) {
-      return sortBlogs(action.payload);
+      return action.payload;
     },
     appendBlog(state, action) {
       state.push(action.payload);
@@ -26,7 +14,7 @@ const blogSlice = createSlice({
     updateBlog(state, action) {
       const id = action.payload.id;
       const changedBlog = action.payload;
-      return sortBlogs(state.map(b => b.id !== id ? b : changedBlog));
+      return state.map(b => b.id !== id ? b : changedBlog);
     },
     deleteBlog(state, action) {
       const id = action.payload;
