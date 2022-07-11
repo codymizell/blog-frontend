@@ -13,7 +13,7 @@ export const User = () => {
 
   useEffect(() => {
     dispatch(initializeUserList());
-  }, [dispatch, user]);
+  }, [dispatch]);
 
   if (!user) return null;
 
@@ -59,7 +59,7 @@ const Users = () => {
 
   useEffect(() => {
     dispatch(initializeUserList());
-  }, [dispatch, userList]);
+  }, [dispatch]);
 
   return (
     <div>

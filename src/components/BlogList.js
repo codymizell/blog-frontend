@@ -33,7 +33,7 @@ export const BlogDetails = () => {
 
   useEffect(() => {
     dispatch(initializeBlogs());
-  }, [dispatch, blog]);
+  }, [dispatch]);
 
   const user = useSelector(state => state.user);
   const [likes, setLikes] = useState(blog ? blog.likes : undefined);
@@ -145,11 +145,6 @@ export const BlogDetails = () => {
 const Blog = ({ blog }) => {
   return (
     <ListItem>
-      {/* <ListItemAvatar>
-        <Avatar>
-          <ArticleIcon />
-        </Avatar>
-      </ListItemAvatar> */}
       <ListItemButton component={RouterLink} to={`/blogs/${blog.id}`}>
         <ListItemAvatar>
           <Avatar>
