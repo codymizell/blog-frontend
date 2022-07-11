@@ -1,4 +1,4 @@
-import { Link as RouterLink } from 'react-router-dom';
+import { Link as RouterLink, useNavigate } from 'react-router-dom';
 import { logout } from '../reducers/userReducer';
 import { useDispatch } from 'react-redux';
 import AppBar from '@mui/material/AppBar';
@@ -6,7 +6,6 @@ import Toolbar from '@mui/material/Toolbar';
 import Button from '@mui/material/Button';
 import { Avatar, Box, Divider, IconButton, Menu, MenuItem, Tooltip } from '@mui/material';
 import { useState } from 'react';
-
 
 const NavBar = ({ user }) => {
 
@@ -25,6 +24,7 @@ const NavBar = ({ user }) => {
 
 const AccountMenu = ({ user }) => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
   const handleClick = (event) => {
@@ -32,6 +32,11 @@ const AccountMenu = ({ user }) => {
   };
   const handleClose = () => {
     setAnchorEl(null);
+  };
+
+  const handleLogout = () => {
+    dispatch(logout());
+    navigate('/');
   };
 
   return (
@@ -46,7 +51,8 @@ const AccountMenu = ({ user }) => {
             aria-haspopup="true"
             aria-expanded={open ? 'true' : undefined}
           >
-            <Avatar sx={{ width: 32, height: 32 }}>{user.username[0]}</Avatar>
+            <Avatar alt="avatar" src={user.avatar} sx={{ bgcolor: '#666666', padding: .5, width: 32, height: 32 }} />
+
           </IconButton>
         </Tooltip>
       </Box>
@@ -85,11 +91,12 @@ const AccountMenu = ({ user }) => {
         transformOrigin={{ horizontal: 'right', vertical: 'top' }}
         anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
       >
-        <MenuItem component={RouterLink} to={`/users/${user.id}`}>
+        <MenuItem component={RouterLink}
+          to={`/users/${user.id}`} >
           Profile
         </MenuItem>
         <Divider />
-        <MenuItem onClick={() => dispatch(logout())}>
+        <MenuItem onClick={handleLogout}>
           Logout
         </MenuItem>
       </Menu>

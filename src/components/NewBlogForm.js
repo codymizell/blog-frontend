@@ -10,20 +10,17 @@ const NewBlogForm = () => {
     event.preventDefault();
 
     const title = event.target.title.value;
-    const author = event.target.author.value;
     const content = event.target.content.value;
 
-    const blog = dispatch(createBlog({ title, author, content, likes: 0 }));
-    // dispatch(initializeBlogs());
+    const blog = dispatch(createBlog({ title, content, likes: 0 }));
     if (blog) {
-      dispatch(setNotification(`you added a new blog '${title}' by ${author}`, 7));
+      dispatch(setNotification(`you added a new blog '${title}'`, 7));
     }
     clearFields(event.target);
   };
 
-  const clearFields = ({ title, author, content }) => {
+  const clearFields = ({ title, content }) => {
     title.value = '';
-    author.value = '';
     content.value = '';
   };
 
@@ -37,13 +34,6 @@ const NewBlogForm = () => {
           <TextField
             name='title'
             label='title'
-            variant='filled'
-            size='small'
-            sx={{ 'label': { color: 'white' }, bgcolor: '#414551' }}
-          />
-          <TextField
-            name='author'
-            label='author'
             variant='filled'
             size='small'
             sx={{ 'label': { color: 'white' }, bgcolor: '#414551' }}

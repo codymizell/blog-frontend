@@ -2,10 +2,9 @@ import { useSelector, useDispatch } from 'react-redux';
 import { useEffect, useRef, useState } from 'react';
 import { setNotification } from '../reducers/notificationReducer';
 import { removeBlog, initializeBlogs, addLike, addComment } from '../reducers/blogsReducer';
-import { Link as RouterLink, Navigate, useParams } from 'react-router-dom';
+import { Link as RouterLink, useParams } from 'react-router-dom';
 import Togglable from './Togglable';
 import NewBlogForm from './NewBlogForm';
-
 import {
   List, ListItem, ListItemAvatar, ListItemText, Avatar,
   ListItemButton, Typography, IconButton, TextField,
@@ -25,22 +24,22 @@ const TextButtonContainer = styled('div')(() => ({
   marginBottom: '10px'
 }));
 
-
 export const BlogDetails = () => {
   const { id } = useParams();
   const dispatch = useDispatch();
-  const user = useSelector(state => state.user);
   const blog = useSelector(state => {
     return state.blogs.find(blog => blog.id === id);
   });
+
+  useEffect(() => {
+    dispatch(initializeBlogs());
+  }, [dispatch, blog]);
+
+  const user = useSelector(state => state.user);
   const [likes, setLikes] = useState(blog ? blog.likes : undefined);
 
+  if (!blog) return null;
 
-  if (!blog) {
-    return (
-      <Navigate replace to="/" />
-    );
-  }
   const own = blog.user && user.username === blog.user.username;
 
   const likeBlog = () => {
@@ -50,7 +49,7 @@ export const BlogDetails = () => {
   };
 
   const deleteBlog = () => {
-    const ok = window.confirm(`remove '${blog.title}' by ${blog.author}?`);
+    const ok = window.confirm(`remove '${blog.title}' by ${blog.user.username}?`);
     if (!ok) return;
 
     try {
@@ -86,7 +85,7 @@ export const BlogDetails = () => {
 
       <TextButtonContainer>
         <Typography variant="caption" component="div" color="#b2b2b2">
-          by {blog.author}
+          by {blog.user.username}
         </Typography>
         {
           own && <IconButton aria-label="delete" size="small" color='error' onClick={() => deleteBlog()}>
@@ -109,7 +108,7 @@ export const BlogDetails = () => {
         </IconButton>
       </TextButtonContainer>
 
-      <Typography variant="h6" component='div' color='#c9c9c9' marginTop='40px' >
+      <Typography variant="h6" component='div' color='#c9c9c9' marginTop='20px' >
         comments
       </Typography>
 
@@ -146,13 +145,18 @@ export const BlogDetails = () => {
 const Blog = ({ blog }) => {
   return (
     <ListItem>
-      <ListItemAvatar>
+      {/* <ListItemAvatar>
         <Avatar>
           <ArticleIcon />
         </Avatar>
-      </ListItemAvatar>
+      </ListItemAvatar> */}
       <ListItemButton component={RouterLink} to={`/blogs/${blog.id}`}>
-        <ListItemText primary={blog.title} secondary={blog.author} secondaryTypographyProps={{ color: '#ababab' }} />
+        <ListItemAvatar>
+          <Avatar>
+            <ArticleIcon />
+          </Avatar>
+        </ListItemAvatar>
+        <ListItemText primary={blog.title} secondary={blog.user.username} secondaryTypographyProps={{ color: '#ababab' }} />
       </ListItemButton>
     </ListItem >
   );
@@ -162,7 +166,6 @@ const BlogList = () => {
   const dispatch = useDispatch();
   const blogs = useSelector(state => state.blogs);
   const blogFormRef = useRef();
-
 
   useEffect(() => {
     dispatch(initializeBlogs());

@@ -1,11 +1,20 @@
 import { useSelector, useDispatch } from 'react-redux/es/exports';
 import { useEffect } from 'react';
 import { initializeUserList } from '../reducers/userListReducer';
-import { Link as RouterLink } from 'react-router-dom';
+import { Link as RouterLink, useParams } from 'react-router-dom';
 import { Avatar, Button, List, ListItem, ListItemButton, ListItemText, Table, TableBody, TableCell, tableCellClasses, TableContainer, TableHead, TableRow, Typography } from '@mui/material';
-import { getRandomAvatar } from '../resources/avatarHelper';
 
-export const User = ({ user }) => {
+export const User = () => {
+  const { id } = useParams();
+  const dispatch = useDispatch();
+  const user = useSelector(state => {
+    return state.userList.find(user => user.id === id);
+  });
+
+  useEffect(() => {
+    dispatch(initializeUserList());
+  }, [dispatch, user]);
+
   if (!user) return null;
 
   return (
@@ -17,20 +26,13 @@ export const User = ({ user }) => {
         gap: 8,
         padding: '40px 0 20px 0'
       }}>
-        <Avatar alt="avatar" src={getRandomAvatar()} sx={{ bgcolor: '#4e5463', padding: .5 }} />
+        <Avatar alt="avatar" src={user.avatar} sx={{ bgcolor: '#4e5463', padding: .5 }} />
         <Typography variant="h3" component="div" color="" >
           {user.username}
         </Typography>
       </div>
 
-      <Typography variant="caption" component="div" color="#b2b2b2" >
-        name
-      </Typography>
-      <Typography variant="subtitle1" component="div" color="" >
-        {user.name}
-      </Typography>
-
-      <Typography variant="caption" component="div" color="#b2b2b2" marginTop='10px'>
+      <Typography variant="subtitle1" component="div" color="#b2b2b2" marginTop='10px'>
         blogs
       </Typography>
 
@@ -74,7 +76,6 @@ const Users = () => {
           <TableHead>
             <TableRow>
               <TableCell align="left" sx={{ color: 'white' }}>user</TableCell>
-              <TableCell align="left" sx={{ color: 'white' }}>name</TableCell>
               <TableCell align="left" sx={{ color: 'white' }}>blogs created</TableCell>
             </TableRow>
           </TableHead>
@@ -97,7 +98,6 @@ const Users = () => {
                     </Button>
 
                   </TableCell>
-                  <TableCell sx={{ color: 'white' }}>{user.name}</TableCell>
                   <TableCell sx={{ color: 'white' }}>{user.blogs.length}</TableCell>
                 </TableRow>
               );
@@ -110,12 +110,3 @@ const Users = () => {
 };
 
 export default Users;
-
-
-// Users
-
-//        blogs created
-// name1       5
-// name2       10
-// name3       4
-// name4       0

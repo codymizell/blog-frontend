@@ -1,5 +1,5 @@
 import { useSelector } from 'react-redux';
-import { Routes, Route, useMatch } from 'react-router-dom';
+import { Routes, Route } from 'react-router-dom';
 import './App.css';
 
 import LoginForm from './components/LoginForm';
@@ -12,14 +12,9 @@ import { Link as RouterLink } from 'react-router-dom';
 
 import { Button, Container, Typography } from '@mui/material';
 
+
 const App = () => {
   const user = useSelector(state => state.user);
-  const userList = useSelector(state => state.userList);
-
-  const userMatch = useMatch('/users/:id');
-  const matchedUser = userMatch
-    ? userList.find(user => user.id === userMatch.params.id)
-    : null;
 
   if (user === null) {
     return <>
@@ -48,7 +43,7 @@ const App = () => {
 
         <Routes>
           <Route path="/users" element={<Users />} />
-          <Route path="/users/:id" element={<User user={matchedUser} />} />
+          <Route path="/users/:id" element={<User />} />
           <Route path="/blogs/:id" element={<BlogDetails />} />
           <Route path="/" element={<BlogList />} />
         </Routes>

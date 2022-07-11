@@ -4,6 +4,7 @@ import { setNotification } from '../reducers/notificationReducer';
 import '../App.css';
 import { Button, TextField, Typography } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
+import { getRandomAvatar } from '../resources/avatarHelper';
 
 const SignupForm = () => {
   const dispatch = useDispatch();
@@ -20,6 +21,7 @@ const SignupForm = () => {
     const credentials = {
       username: event.target.username.value,
       password: event.target.password.value,
+      avatar: getRandomAvatar(),
     };
 
     const user = await dispatch(register(credentials));
