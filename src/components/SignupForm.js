@@ -1,41 +1,49 @@
 import { useDispatch } from 'react-redux';
-import { login, } from '../reducers/userReducer';
+import { register, } from '../reducers/userReducer';
 import { setNotification } from '../reducers/notificationReducer';
 import '../App.css';
 import { Button, TextField, Typography } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
 
-const LoginForm = () => {
+const SignupForm = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
-  const handleLogin = async (event) => {
+  const handleSignup = async (event) => {
     event.preventDefault();
+
+    if (event.target.password.value !== event.target.passwordConfirm.value) {
+      dispatch(setNotification('passwords do not match'));
+      return;
+    }
 
     const credentials = {
       username: event.target.username.value,
       password: event.target.password.value,
     };
 
-    const user = await dispatch(login(credentials));
+    const user = await dispatch(register(credentials));
     if (!user) {
-      clearFields(event.target);
-      dispatch(setNotification(`welcome back, ${credentials.username}`));
+      dispatch(setNotification(`hello ${credentials.username} :)`));
+      navigate('/');
       return;
     }
     clearFields(event.target);
   };
 
-  const clearFields = ({ username, password }) => {
+  const clearFields = ({ username, password, passwordConfirm }) => {
     username.value = '';
     password.value = '';
+    passwordConfirm.value = '';
   };
 
   return (
     <div>
       <Typography variant="h6" component="div">
-        login
+        create an account
       </Typography>
 
-      <form onSubmit={handleLogin}>
+      <form onSubmit={handleSignup}>
         <div>
           <TextField
             name='username'
@@ -55,12 +63,22 @@ const LoginForm = () => {
             sx={{ 'label': { color: '#9aa4bf' }, bgcolor: '#414551', }}
           />
         </div>
+        <div>
+          <TextField
+            name='passwordConfirm'
+            label='confirm password'
+            variant='filled'
+            size='small'
+            type='password'
+            sx={{ 'label': { color: '#9aa4bf' }, bgcolor: '#414551', }}
+          />
+        </div>
         <Button variant="contained" color="primary" id='create-button' type='submit'>
-          login
+          create
         </Button>
       </form>
     </div>
   );
 };
 
-export default LoginForm;
+export default SignupForm;

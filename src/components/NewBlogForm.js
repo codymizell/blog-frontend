@@ -1,4 +1,4 @@
-import { createBlog, initializeBlogs } from '../reducers/blogsReducer';
+import { createBlog, } from '../reducers/blogsReducer';
 import { setNotification } from '../reducers/notificationReducer';
 import { useDispatch } from 'react-redux/es/exports';
 import { Button, Stack, TextField, Typography, } from '@mui/material';
@@ -13,14 +13,11 @@ const NewBlogForm = () => {
     const author = event.target.author.value;
     const content = event.target.content.value;
 
-    try {
-      dispatch(createBlog({ title, author, content, likes: 0 }));
-      dispatch(initializeBlogs());
+    const blog = dispatch(createBlog({ title, author, content, likes: 0 }));
+    // dispatch(initializeBlogs());
+    if (blog) {
       dispatch(setNotification(`you added a new blog '${title}' by ${author}`, 7));
-    } catch (err) {
-      dispatch(setNotification(`adding blog failed: ${err.response.data.error}`, 7));
     }
-
     clearFields(event.target);
   };
 

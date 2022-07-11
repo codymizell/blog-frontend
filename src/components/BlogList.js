@@ -37,7 +37,6 @@ export const BlogDetails = () => {
 
 
   if (!blog) {
-    console.log('error');
     return (
       <Navigate replace to="/" />
     );

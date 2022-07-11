@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-vars */
 import { Link as RouterLink } from 'react-router-dom';
 import { logout } from '../reducers/userReducer';
 import { useDispatch } from 'react-redux';

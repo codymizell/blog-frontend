@@ -17,8 +17,13 @@ const getAll = async () => {
 };
 
 const create = async newObject => {
-  const response = await axios.post(baseUrl, newObject, config());
-  return response.data;
+  try {
+    const response = await axios.post(baseUrl, newObject, config());
+    return response.data;
+  } catch (error) {
+    console.log(error);
+    return error.response.data.error;
+  }
 };
 
 const update = async (newObject) => {
@@ -27,7 +32,13 @@ const update = async (newObject) => {
 };
 
 const remove = async (id) => {
-  return await axios.delete(`${baseUrl}/${id}`, config());
+  try {
+    const response = await axios.delete(`${baseUrl}/${id}`, config());
+    return response.data;
+  } catch (error) {
+    console.log(error);
+    return error.response.data.error;
+  }
 };
 
 const createComment = async (id, comment) => {
