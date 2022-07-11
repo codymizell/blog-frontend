@@ -1,7 +1,6 @@
 import { useDispatch } from 'react-redux';
 import { register, } from '../reducers/userReducer';
 import { setNotification } from '../reducers/notificationReducer';
-import '../App.css';
 import { Button, TextField, Typography } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import { getRandomAvatar } from '../resources/avatarHelper';
@@ -24,6 +23,7 @@ const SignupForm = () => {
       avatar: getRandomAvatar(),
     };
 
+    if (!credentials.username) return;
     const user = await dispatch(register(credentials));
     if (!user) {
       dispatch(setNotification(`hello ${credentials.username} :)`));

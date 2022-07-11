@@ -169,7 +169,7 @@ const BlogList = () => {
 
   useEffect(() => {
     dispatch(initializeBlogs());
-  }, [dispatch, blogs]);
+  }, []);
 
   return (
     <div>
